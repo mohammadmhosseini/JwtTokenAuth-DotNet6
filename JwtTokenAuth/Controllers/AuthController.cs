@@ -15,10 +15,29 @@ namespace JwtTokenAuth.Controllers
     {
         public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, IUserService userService)
         {
             _configuration = configuration;
+            _userService = userService;
+        }
+
+        [HttpGet, Authorize]
+        public ActionResult<string> GetMe()
+        {
+            var username = _userService.GetMyName();
+            return Ok(username);
+
+            //var username = User?.Identity?.Name;
+            //var userName = User.FindFirstValue(ClaimTypes.Name);
+            //var role = User.FindFirstValue(ClaimTypes.Role);
+            //return Ok(new
+            //{
+            //    username,
+            //    userName,
+            //    role
+            //});
         }
 
         [HttpPost("register")]
